@@ -1,0 +1,1764 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jordan Radar · Black Crow 9.0</title>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Microsoft JhengHei", Arial, sans-serif; background: linear-gradient(180deg, #071225 0%, #0b1530 100%); color: #e8efff; padding: 18px; }
+.wrap { max-width: 1280px; margin: 0 auto; }
+.title { font-size: 30px; font-weight: 800; margin-bottom: 8px; }
+.subtitle { color: #9db0d8; font-size: 14px; margin-bottom: 18px; line-height: 1.6; }
+.section { background: rgba(18, 31, 66, 0.92); border: 1px solid rgba(104, 132, 194, 0.16); border-radius: 18px; padding: 18px; margin-bottom: 18px; box-shadow: 0 8px 28px rgba(0, 0, 0, 0.24); }
+.section h2 { margin: 0 0 14px 0; font-size: 22px; }
+.top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hero-card { background: rgba(34, 51, 97, 0.9); border-radius: 16px; padding: 16px; }
+.hero-label { color: #91a5d4; font-size: 13px; margin-bottom: 8px; }
+.hero-value { font-size: 30px; font-weight: 800; }
+.hero-desc { margin-top: 8px; color: #b6c6eb; font-size: 13px; }
+.note-box, .flow-box { background: rgba(31, 47, 89, 0.92); border-radius: 16px; padding: 14px; line-height: 1.7; color: #dce7ff; }
+.pill-list { display: flex; flex-direction: column; gap: 10px; }
+.pill-row { background: rgba(36, 55, 101, 0.9); border-radius: 999px; padding: 12px 14px; font-size: 14px; color: #ecf3ff; word-break: break-word; }
+.group-stack { display: grid; gap: 12px; }
+.group-card { background: rgba(31, 47, 89, 0.92); border-radius: 16px; padding: 14px; }
+.group-name { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+.group-metrics { display: grid; gap: 8px; }
+.metric-label { color: #8ea3d0; display: block; font-size: 13px; margin-bottom: 4px; }
+.metric-value { font-weight: 700; font-size: 16px; }
+.table-wrap { overflow-x: auto; border-radius: 14px; }
+table { width: 100%; border-collapse: collapse; min-width: 1500px; background: rgba(18, 31, 66, 0.65); table-layout: fixed; }
+th, td { border-bottom: 1px solid rgba(255,255,255,0.06); padding: 10px 8px; text-align: center; white-space: normal; font-size: 14px; vertical-align: top; }
+th { position: sticky; top: 0; background: #15264f; color: #d7e3ff; }
+td:last-child, th:last-child { min-width: 300px; text-align: left; }
+.name-btn { width: 100%; border: 0; border-radius: 999px; padding: 10px 12px; font-size: 15px; font-weight: 700; color: #eaf2ff; background: rgba(64, 109, 214, 0.26); border: 1px solid rgba(116, 156, 255, 0.35); cursor: pointer; }
+.name-btn:active { transform: scale(0.98); }
+.num-pos { color: #42d67b; font-weight: 700; }
+.num-neg { color: #ff6b6b; font-weight: 700; }
+.num-zero { color: #ffcf59; font-weight: 700; }
+.trend-bull { color: #42d67b; font-weight: 800; }
+.trend-bear { color: #ff6b6b; font-weight: 800; }
+.trend-flat { color: #ffcf59; font-weight: 800; }
+.trend-rebound { color: #ffa95e; font-weight: 800; }
+.action-track { color:#0b1b12; background:#42d67b; padding:4px 10px; border-radius:999px; font-weight:800; display:inline-block; }
+.action-wait { color:#eaf4ff; background:#3d7eff; padding:4px 10px; border-radius:999px; font-weight:800; display:inline-block; }
+.action-neutral { color:#1f1a06; background:#ffcf59; padding:4px 10px; border-radius:999px; font-weight:800; display:inline-block; }
+.action-caution { color:#2a1400; background:#ffb347; padding:4px 10px; border-radius:999px; font-weight:800; display:inline-block; }
+.action-defend { color:#fff0f0; background:#e55353; padding:4px 10px; border-radius:999px; font-weight:800; display:inline-block; }
+.short-sell { color:#fff0f0; background:#d93636; padding:4px 10px; border-radius:999px; font-weight:800; display:inline-block; }
+.short-watch { color:#fff3ea; background:#ff8a3d; padding:4px 10px; border-radius:999px; font-weight:800; display:inline-block; }
+.short-hold { color:#fff0f0; background:#8b2f2f; padding:4px 10px; border-radius:999px; font-weight:800; display:inline-block; }
+.short-avoid { color:#2a1400; background:#ffcf59; padding:4px 10px; border-radius:999px; font-weight:800; display:inline-block; }
+.rhythm-strong { color:#42d67b; font-weight:800; }
+.rhythm-flat { color:#ffcf59; font-weight:800; }
+.rhythm-weak { color:#ff6b6b; font-weight:800; }
+.warn-tag { display:inline-block; padding:3px 8px; border-radius:999px; font-size:12px; font-weight:700; margin:2px 4px 2px 0; }
+.warn-high { background:rgba(229,83,83,0.22); color:#ff7b7b; border:1px solid rgba(229,83,83,0.45); }
+.warn-mid { background:rgba(255,159,67,0.20); color:#ffb25c; border:1px solid rgba(255,159,67,0.40); }
+.warn-low { background:rgba(255,207,89,0.18); color:#ffd76d; border:1px solid rgba(255,207,89,0.36); }
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(4, 10, 24, 0.82); z-index: 999; padding: 20px 14px; overflow-y: auto; }
+.modal-overlay.show { display: block; }
+.modal-card { max-width: 860px; margin: 40px auto; background: #13234a; border: 1px solid rgba(116, 156, 255, 0.25); border-radius: 18px; padding: 18px; position: relative; box-shadow: 0 16px 40px rgba(0,0,0,0.38); }
+.modal-close { position: absolute; top: 10px; right: 12px; width: 36px; height: 36px; border-radius: 999px; border: 0; background: rgba(255,255,255,0.12); color: #fff; font-size: 22px; cursor: pointer; }
+.modal-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; padding-right: 40px; }
+.modal-topline { color: #bdd0ff; margin-bottom: 12px; line-height: 1.6; }
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.detail-item { background: rgba(20, 34, 69, 0.9); border-radius: 12px; padding: 10px 12px; min-height: 72px; }
+.detail-k { color: #8ea3d0; font-size: 12px; margin-bottom: 6px; }
+.detail-v { font-size: 15px; line-height: 1.5; word-break: break-word; }
+@media (max-width: 720px) { body { padding: 14px; } .title { font-size: 26px; } .top-grid { grid-template-columns: 1fr; } .hero-value { font-size: 26px; } .section { padding: 16px; } .detail-grid { grid-template-columns: 1fr; } .modal-card { margin: 18px auto; padding: 16px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="title">Jordan Radar · Black Crow 9.0</div>
+    <div class="subtitle">更新時間：2026-03-18 06:19:18<br>批次：20260318_061918 ｜ 頁面：Pro 版 ｜ 資料版本：9.0-text-tuned-v2<br>技術時間：2026-03-17 00:00:00 ｜ 報價時間：—</div>
+
+    <div class="section"><h2>結果總覽</h2><div class="top-grid"><div class="hero-card"><div class="hero-label">市場溫度</div><div class="hero-value">中性</div><div class="hero-desc">看整體結構是偏熱、偏冷，還是修復中。</div></div><div class="hero-card"><div class="hero-label">今日作戰模式</div><div class="hero-value">觀望偏多</div><div class="hero-desc">先看結構強的，不追反彈尾巴。</div></div></div></div>
+    <div class="section"><h2>盤型</h2><div class="flow-box">偏空分化盤<br><small style="color:#b6c6eb;display:block;margin-top:8px;">強的有強，弱的仍弱，不能用同一套打法全押。</small></div></div>
+    <div class="section"><h2>今日作戰摘要</h2><div class="note-box">主流族群：能源原物料<br>資金模式：集中<br>市場節奏：反彈修復<br>參與寬度：寬<br><br>今天不是全面轉強，而是中性結構中的分化修復。主流先看能源原物料，次主流留意面板太陽能，市場參與面屬於寬。 目前節奏是反彈修復，跌破 MA20 比例仍有 60.0%，KD 死叉比例 36.7%，轉弱比例 36.7%。 操作上以觀望偏多為主，資金模式偏集中，先看強、慢追價、弱勢不碰；目前空方確認比例 3.3%。</div></div>
+    <div class="section"><h2>開盤前外部因子</h2><div class="note-box">美股：NASDAQ 0.4708% ／ S&P500 0.2494% ／ DOW 0.0998% ／ Russell 0.6673%<br>夜盤：恆生期貨 0.1336% ／ 台指期夜盤 1.4818%<br>商品：WTI 1.2193% ／ 黃金 0.1882%</div></div>
+    <div class="section"><h2>市場壓力</h2><div class="note-box">跌破 MA20：60.0% ｜ KD死叉：36.7% ｜ 節奏轉弱：36.7% ｜ 空方確認：3.3%<br><br>解讀：大多數標的仍在修復區，現在不是全面進攻盤。</div></div>
+    
+    <div class="section">
+        <h2>可優先關注</h2>
+        <div class="pill-list">
+            <div class="pill-row">宏碁｜<span class="trend-bull">偏多</span>｜<span class="action-track">買</span>｜27.45</div><div class="pill-row">台新新光金｜<span class="trend-bull">偏多</span>｜<span class="action-track">買</span>｜25.05</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>等訊號補強</h2>
+        <div class="pill-list">
+            <div class="pill-row">台股加權指數｜<span class="trend-bull">偏多</span>｜<span class="action-wait">等</span>｜33836.57</div><div class="pill-row">中信金｜<span class="trend-bull">偏多</span>｜<span class="action-wait">等</span>｜52.9</div><div class="pill-row">WTI原油｜<span class="trend-bull">偏多</span>｜<span class="action-wait">等</span>｜94.68</div><div class="pill-row">期元大S&P石油｜<span class="trend-bull">偏多</span>｜<span class="action-wait">等</span>｜25.65</div><div class="pill-row">台幣匯率｜<span class="trend-bull">偏多</span>｜<span class="action-wait">等</span>｜31.88</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>先看不急著動</h2>
+        <div class="pill-list">
+            <div class="pill-row">元大台灣50｜<span class="trend-flat">震盪</span>｜<span class="action-neutral">看</span>｜76.65</div><div class="pill-row">台積電｜<span class="trend-flat">震盪</span>｜<span class="action-neutral">看</span>｜1870.0</div><div class="pill-row">中信中國50｜<span class="trend-flat">震盪</span>｜<span class="action-neutral">看</span>｜25.35</div><div class="pill-row">台塑化｜<span class="trend-flat">震盪</span>｜<span class="action-neutral">看</span>｜56.7</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>不宜追價</h2>
+        <div class="pill-list">
+            <div class="pill-row">台塑｜<span class="trend-flat">震盪</span>｜<span class="action-caution">別追</span>｜46.45</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>等空焦點</h2>
+        <div class="pill-list">
+            <div class="pill-row">無</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>弱勢避開</h2>
+        <div class="pill-list">
+            <div class="pill-row">凱基台灣TOP50｜<span class="trend-bear">震盪偏空</span>｜<span class="action-defend">停</span>｜23.54</div><div class="pill-row">第一金｜<span class="trend-bear">震盪偏空</span>｜<span class="action-defend">停</span>｜29.1</div><div class="pill-row">中鋼｜<span class="trend-bear">震盪偏空</span>｜<span class="action-defend">停</span>｜19.25</div><div class="pill-row">友達｜<span class="trend-bear">震盪偏空</span>｜<span class="action-defend">停</span>｜15.9</div><div class="pill-row">中信中國50正2｜<span class="trend-rebound">偏空反彈</span>｜<span class="action-defend">停</span>｜11.47</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>空方確認名單</h2>
+        <div class="pill-list">
+            <div class="pill-row">潤泰新｜<span class="trend-bear">偏空</span>｜<span class="action-defend">停</span>｜26.9</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>結構最強</h2>
+        <div class="pill-list">
+            <div class="pill-row">宏碁｜<span class="trend-bull">偏多</span>｜<span class="action-track">買</span>｜27.45</div><div class="pill-row">台新新光金｜<span class="trend-bull">偏多</span>｜<span class="action-track">買</span>｜25.05</div><div class="pill-row">台股加權指數｜<span class="trend-bull">偏多</span>｜<span class="action-wait">等</span>｜33836.57</div><div class="pill-row">中信金｜<span class="trend-bull">偏多</span>｜<span class="action-wait">等</span>｜52.9</div><div class="pill-row">WTI原油｜<span class="trend-bull">偏多</span>｜<span class="action-wait">等</span>｜94.68</div><div class="pill-row">期元大S&P石油｜<span class="trend-bull">偏多</span>｜<span class="action-wait">等</span>｜25.65</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <h2>最弱標的</h2>
+        <div class="pill-list">
+            <div class="pill-row">潤泰新｜<span class="trend-bear">偏空</span>｜<span class="action-defend">停</span>｜26.9</div><div class="pill-row">三商壽｜<span class="trend-bear">偏空</span>｜<span class="action-defend">停</span>｜7.68</div><div class="pill-row">裕隆｜<span class="trend-rebound">偏空反彈</span>｜<span class="action-defend">停</span>｜28.0</div><div class="pill-row">鴻海｜<span class="trend-rebound">偏空反彈</span>｜<span class="action-defend">停</span>｜212.0</div><div class="pill-row">華航｜<span class="trend-rebound">偏空反彈</span>｜<span class="action-defend">停</span>｜19.0</div><div class="pill-row">香港恆生指數｜<span class="trend-rebound">偏空反彈</span>｜<span class="action-defend">停</span>｜25868.54</div>
+        </div>
+    </div>
+    
+    
+    <div class="section">
+        <h2>族群強弱</h2>
+        <div class="group-stack">
+            
+        <div class="group-card">
+            <div class="group-name">能源原物料</div>
+            <div class="group-metrics">
+                <div><span class="metric-label">判斷</span><span class="metric-value">偏多</span></div>
+                <div><span class="metric-label">平均分數</span><span class="metric-value">5.55</span></div>
+                <div><span class="metric-label">上漲比例</span><span class="metric-value">25.0%</span></div>
+                <div><span class="metric-label">空方確認比例</span><span class="metric-value">0.0%</span></div>
+            </div>
+        </div>
+        
+        <div class="group-card">
+            <div class="group-name">面板太陽能</div>
+            <div class="group-metrics">
+                <div><span class="metric-label">判斷</span><span class="metric-value">偏多</span></div>
+                <div><span class="metric-label">平均分數</span><span class="metric-value">2.55</span></div>
+                <div><span class="metric-label">上漲比例</span><span class="metric-value">100.0%</span></div>
+                <div><span class="metric-label">空方確認比例</span><span class="metric-value">0.0%</span></div>
+            </div>
+        </div>
+        
+        <div class="group-card">
+            <div class="group-name">市場</div>
+            <div class="group-metrics">
+                <div><span class="metric-label">判斷</span><span class="metric-value">中性</span></div>
+                <div><span class="metric-label">平均分數</span><span class="metric-value">1.15</span></div>
+                <div><span class="metric-label">上漲比例</span><span class="metric-value">60.0%</span></div>
+                <div><span class="metric-label">空方確認比例</span><span class="metric-value">0.0%</span></div>
+            </div>
+        </div>
+        
+        <div class="group-card">
+            <div class="group-name">權值電子</div>
+            <div class="group-metrics">
+                <div><span class="metric-label">判斷</span><span class="metric-value">中性</span></div>
+                <div><span class="metric-label">平均分數</span><span class="metric-value">0.55</span></div>
+                <div><span class="metric-label">上漲比例</span><span class="metric-value">66.7%</span></div>
+                <div><span class="metric-label">空方確認比例</span><span class="metric-value">0.0%</span></div>
+            </div>
+        </div>
+        
+        <div class="group-card">
+            <div class="group-name">中國</div>
+            <div class="group-metrics">
+                <div><span class="metric-label">判斷</span><span class="metric-value">偏空</span></div>
+                <div><span class="metric-label">平均分數</span><span class="metric-value">-2.12</span></div>
+                <div><span class="metric-label">上漲比例</span><span class="metric-value">100.0%</span></div>
+                <div><span class="metric-label">空方確認比例</span><span class="metric-value">0.0%</span></div>
+            </div>
+        </div>
+        
+        <div class="group-card">
+            <div class="group-name">金融</div>
+            <div class="group-metrics">
+                <div><span class="metric-label">判斷</span><span class="metric-value">偏空</span></div>
+                <div><span class="metric-label">平均分數</span><span class="metric-value">-2.45</span></div>
+                <div><span class="metric-label">上漲比例</span><span class="metric-value">83.3%</span></div>
+                <div><span class="metric-label">空方確認比例</span><span class="metric-value">0.0%</span></div>
+            </div>
+        </div>
+        
+        <div class="group-card">
+            <div class="group-name">傳產交通</div>
+            <div class="group-metrics">
+                <div><span class="metric-label">判斷</span><span class="metric-value">偏空</span></div>
+                <div><span class="metric-label">平均分數</span><span class="metric-value">-6.62</span></div>
+                <div><span class="metric-label">上漲比例</span><span class="metric-value">66.7%</span></div>
+                <div><span class="metric-label">空方確認比例</span><span class="metric-value">16.7%</span></div>
+            </div>
+        </div>
+        
+        </div>
+    </div>
+    
+    <div class="section"><h2>精簡版總表</h2><div class="table-wrap"><table><thead><tr><th>行動建議</th><th>判讀</th><th>名稱</th><th>機會</th><th>價格</th><th>漲跌幅%</th><th>警示</th><th>節奏</th><th>MA40</th><th>一句話</th></tr></thead><tbody>
+    <tr>
+        <td><span class="action-track">買</span></td>
+        <td><span class="trend-bull">偏多</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-0')">宏碁</button></td>
+        <td>主升段</td>
+        <td>27.45<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.1</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>26.72</td>
+        <td>中期結構在均線之上，以偏多看待，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-track">買</span></td>
+        <td><span class="trend-bull">偏多</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-1')">台新新光金</button></td>
+        <td>主升段</td>
+        <td>25.05<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.01</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">MACD弱於訊號</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>23.42</td>
+        <td>中期結構在均線之上，以偏多看待，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-wait">等</span></td>
+        <td><span class="trend-bull">偏多</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-2')">台股加權指數</button></td>
+        <td>主升段</td>
+        <td>33836.57<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.48</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">站上MA20(新)</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>32640.51</td>
+        <td>中期結構在均線之上，以偏多看待，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-wait">等</span></td>
+        <td><span class="trend-bull">偏多</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-3')">中信金</button></td>
+        <td>主升段</td>
+        <td>52.9<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.93</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">站上MA20(新)</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>51.51</td>
+        <td>中期結構在均線之上，以偏多看待，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-wait">等</span></td>
+        <td><span class="trend-bull">偏多</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-4')">WTI原油</button></td>
+        <td>主升段</td>
+        <td>94.68<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.26</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD柱體縮短</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>70.62</td>
+        <td>中期結構在均線之上，以偏多看待，短線節奏轉弱。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-wait">等</span></td>
+        <td><span class="trend-bull">偏多</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-5')">期元大S&P石油</button></td>
+        <td>主升段</td>
+        <td>25.65<br><small>技術基準價</small></td>
+        <td><span class="num-neg">-3.46</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD柱體縮短</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>18.39</td>
+        <td>中期結構在均線之上，以偏多看待，短線節奏轉弱。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-wait">等</span></td>
+        <td><span class="trend-bull">偏多</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-6')">台幣匯率</button></td>
+        <td>主升段</td>
+        <td>31.88<br><small>技術基準價</small></td>
+        <td><span class="num-neg">-0.87</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-low">MACD柱體縮短</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>31.55</td>
+        <td>中期結構在均線之上，以偏多看待，短線節奏轉弱。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-wait">等</span></td>
+        <td><span class="trend-bull">偏多</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-7')">元晶</button></td>
+        <td>主升段</td>
+        <td>52.2<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.56</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD柱體縮短</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>42.58</td>
+        <td>中期結構在均線之上，以偏多看待，短線節奏轉弱。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-wait">等</span></td>
+        <td><span class="trend-bull">偏多</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-8')">中石化</button></td>
+        <td>主升段</td>
+        <td>8.51<br><small>技術基準價</small></td>
+        <td><span class="num-neg">-2.07</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD柱體縮短</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>8.27</td>
+        <td>中期結構在均線之上，以偏多看待，短線節奏轉弱。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-wait">等</span></td>
+        <td><span class="trend-bull">偏多</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-9')">群創</button></td>
+        <td>主升段</td>
+        <td>27.7<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.47</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD柱體縮短</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>24.86</td>
+        <td>中期結構在均線之上，以偏多看待，短線節奏轉弱。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-neutral">看</span></td>
+        <td><span class="trend-flat">震盪</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-10')">元大台灣50</button></td>
+        <td>一般</td>
+        <td>76.65<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.39</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>74.47</td>
+        <td>目前介於中期結構分界，暫以震盪整理看待，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-neutral">看</span></td>
+        <td><span class="trend-flat">震盪</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-11')">台積電</button></td>
+        <td>一般</td>
+        <td>1870.0<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.36</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span> <span class="warn-tag warn-high">KD黃金交叉(新)</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>1824.25</td>
+        <td>目前介於中期結構分界，暫以震盪整理看待，短線節奏轉強，剛出現 KD 黃金交叉。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-neutral">看</span></td>
+        <td><span class="trend-flat">震盪</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-12')">中信中國50</button></td>
+        <td>一般</td>
+        <td>25.35<br><small>技術基準價</small></td>
+        <td><span class="num-pos">0.32</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-high">跌破MA40</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>26.05</td>
+        <td>目前介於中期結構分界，暫以震盪整理看待，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-neutral">看</span></td>
+        <td><span class="trend-flat">震盪</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-13')">台塑化</button></td>
+        <td>一般</td>
+        <td>56.7<br><small>技術基準價</small></td>
+        <td><span class="num-neg">-2.24</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-low">MACD柱體縮短</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>52.72</td>
+        <td>中期結構在均線之上，暫以震盪整理看待，短線節奏轉弱。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-caution">別追</span></td>
+        <td><span class="trend-flat">震盪</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-14')">台塑</button></td>
+        <td>一般</td>
+        <td>46.45<br><small>技術基準價</small></td>
+        <td><span class="num-neg">-0.85</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-flat">整理</span></td>
+        <td>46.31</td>
+        <td>目前介於中期結構分界，暫以震盪整理看待。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-bear">震盪偏空</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-15')">凱基台灣TOP50</button></td>
+        <td>一般</td>
+        <td>23.54<br><small>技術基準價</small></td>
+        <td><span class="num-neg">-0.51</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>23.78</td>
+        <td>中期結構仍在均線之下，先以震盪偏空看待，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-bear">震盪偏空</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-16')">第一金</button></td>
+        <td>一般</td>
+        <td>29.1<br><small>技術基準價</small></td>
+        <td><span class="num-pos">0.87</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>29.27</td>
+        <td>中期結構仍在均線之下，先以震盪偏空看待，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-bear">震盪偏空</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-17')">中鋼</button></td>
+        <td>一般</td>
+        <td>19.25<br><small>技術基準價</small></td>
+        <td><span class="num-pos">0.52</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>19.86</td>
+        <td>中期結構仍在均線之下，先以震盪偏空看待，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-bear">震盪偏空</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-18')">友達</button></td>
+        <td>一般</td>
+        <td>15.9<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.27</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-low">MACD柱體縮短</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>15.47</td>
+        <td>目前介於中期結構分界，先以震盪偏空看待，短線節奏轉弱。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-rebound">偏空反彈</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-19')">中信中國50正2</button></td>
+        <td>一般</td>
+        <td>11.47<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.06</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>12.27</td>
+        <td>中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-rebound">偏空反彈</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-20')">S&P500期貨</button></td>
+        <td>一般</td>
+        <td>6770.75<br><small>技術基準價</small></td>
+        <td><span class="num-pos">0.98</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span> <span class="warn-tag warn-high">KD黃金交叉(新)</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>6880.51</td>
+        <td>中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強，剛出現 KD 黃金交叉。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-rebound">偏空反彈</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-21')">香港恆生指數</button></td>
+        <td>一般</td>
+        <td>25868.54<br><small>技術基準價</small></td>
+        <td><span class="num-pos">0.13</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>26519.79</td>
+        <td>中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-rebound">偏空反彈</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-22')">國泰金</button></td>
+        <td>一般</td>
+        <td>73.2<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.1</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>75.53</td>
+        <td>中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-rebound">偏空反彈</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-23')">台泥</button></td>
+        <td>一般</td>
+        <td>24.45<br><small>技術基準價</small></td>
+        <td><span class="num-neg">-0.61</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>25.49</td>
+        <td>中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-rebound">偏空反彈</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-24')">兆豐金</button></td>
+        <td>一般</td>
+        <td>39.35<br><small>技術基準價</small></td>
+        <td><span class="num-pos">0.9</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>39.75</td>
+        <td>中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-rebound">偏空反彈</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-25')">華航</button></td>
+        <td>一般</td>
+        <td>19.0<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.6</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-strong">轉強</span></td>
+        <td>21.02</td>
+        <td>中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-rebound">偏空反彈</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-26')">裕隆</button></td>
+        <td>一般</td>
+        <td>28.0<br><small>技術基準價</small></td>
+        <td><span class="num-pos">1.08</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-flat">整理</span></td>
+        <td>30.48</td>
+        <td>中期結構仍在均線之下，先視為偏空中的反彈。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-rebound">偏空反彈</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-27')">鴻海</button></td>
+        <td>一般</td>
+        <td>212.0<br><small>技術基準價</small></td>
+        <td><span class="num-neg">-2.08</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-low">MACD柱體縮短</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>223.75</td>
+        <td>中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉弱。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-bear">偏空</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-28')">潤泰新</button></td>
+        <td>一般</td>
+        <td>26.9<br><small>技術基準價</small></td>
+        <td><span class="num-pos">0.75</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-low">MACD柱體縮短</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>28.92</td>
+        <td>中期結構仍在均線之下，空方結構仍在，短線節奏轉弱，空方信號：可放空。</td>
+    </tr>
+    
+    <tr>
+        <td><span class="action-defend">停</span></td>
+        <td><span class="trend-bear">偏空</span></td>
+        <td><button class="name-btn" type="button" onclick="openModal('symbol-modal-29')">三商壽</button></td>
+        <td>一般</td>
+        <td>7.68<br><small>技術基準價</small></td>
+        <td><span class="num-neg">-0.65</span><br><small>技術基準漲跌幅</small></td>
+        <td><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-low">MACD柱體縮短</span> <span class="warn-tag warn-high">空方主導</span></td>
+        <td><span class="rhythm-weak">轉弱</span></td>
+        <td>7.93</td>
+        <td>中期結構仍在均線之下，空方結構仍在，短線節奏轉弱。</td>
+    </tr>
+    </tbody></table></div></div>
+</div>
+
+    <div id="symbol-modal-0" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-0')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-0')">×</button>
+            <div class="modal-title">宏碁</div>
+            <div class="modal-topline">
+                <span class="action-track">買</span>｜
+                <span class="trend-bull">偏多</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">27.45</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.1</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">62.35 / 59.58</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">54.58</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">0.196</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">0.129</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">0.067</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">27.49 / 26.95 / 26.72</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">是</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">7.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">8.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-track">買</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，以偏多看待，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-1" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-1')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-1')">×</button>
+            <div class="modal-title">台新新光金</div>
+            <div class="modal-topline">
+                <span class="action-track">買</span>｜
+                <span class="trend-bull">偏多</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">25.05</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.01</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">75.82 / 63.1</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">62.15</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">0.527</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">0.61</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.084</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">24.72 / 24.56 / 23.42</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">是</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">6.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">7.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-track">買</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">MACD弱於訊號</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，以偏多看待，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-2" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-2')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-2')">×</button>
+            <div class="modal-title">台股加權指數</div>
+            <div class="modal-topline">
+                <span class="action-wait">等</span>｜
+                <span class="trend-bull">偏多</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">33836.57</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.48</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">63.19 / 53.24</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">55.57</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">415.341</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">566.556</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-151.215</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">33655.09 / 33642.29 / 32640.51</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">是</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">6.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-wait">等</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">站上MA20(新)</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，以偏多看待，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-3" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-3')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-3')">×</button>
+            <div class="modal-title">中信金</div>
+            <div class="modal-topline">
+                <span class="action-wait">等</span>｜
+                <span class="trend-bull">偏多</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">52.9</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.93</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">61.06 / 44.57</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">57.52</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">0.188</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">0.313</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.125</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">51.72 / 52.31 / 51.51</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">是</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">6.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-wait">等</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">站上MA20(新)</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，以偏多看待，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-4" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-4')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-4')">×</button>
+            <div class="modal-title">WTI原油</div>
+            <div class="modal-topline">
+                <span class="action-wait">等</span>｜
+                <span class="trend-bull">偏多</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">94.68</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.26</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">49.13 / 54.61</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">68.69</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">8.349</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">6.6</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">1.749</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">93.97 / 78.4 / 70.62</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">是</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">4.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">6.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-wait">等</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD柱體縮短</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，以偏多看待，短線節奏轉弱。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-5" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-5')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-5')">×</button>
+            <div class="modal-title">期元大S&P石油</div>
+            <div class="modal-topline">
+                <span class="action-wait">等</span>｜
+                <span class="trend-bull">偏多</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">25.65</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-neg">-3.46</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">56.34 / 59.04</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">64.79</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">2.459</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">1.925</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">0.534</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">25.02 / 20.75 / 18.39</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">是</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">4.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">6.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-wait">等</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD柱體縮短</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，以偏多看待，短線節奏轉弱。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-6" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-6')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-6')">×</button>
+            <div class="modal-title">台幣匯率</div>
+            <div class="modal-topline">
+                <span class="action-wait">等</span>｜
+                <span class="trend-bull">偏多</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">31.88</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-neg">-0.87</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">73.14 / 70.47</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">57.54</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">0.13</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">0.086</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">0.044</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">31.91 / 31.63 / 31.55</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">是</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">6.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-wait">等</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-low">MACD柱體縮短</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，以偏多看待，短線節奏轉弱。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-7" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-7')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-7')">×</button>
+            <div class="modal-title">元晶</div>
+            <div class="modal-topline">
+                <span class="action-wait">等</span>｜
+                <span class="trend-bull">偏多</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">52.2</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.56</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">65.33 / 65.4</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">65.36</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">3.722</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">3.57</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">0.152</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">51.5 / 45.87 / 42.58</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">是</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">4.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">5.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-wait">等</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD柱體縮短</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，以偏多看待，短線節奏轉弱。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-8" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-8')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-8')">×</button>
+            <div class="modal-title">中石化</div>
+            <div class="modal-topline">
+                <span class="action-wait">等</span>｜
+                <span class="trend-bull">偏多</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">8.51</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-neg">-2.07</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">37.6 / 46.34</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">51.08</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">0.174</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">0.172</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">0.002</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">8.65 / 8.44 / 8.27</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">是</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">5.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-wait">等</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD柱體縮短</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，以偏多看待，短線節奏轉弱。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-9" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-9')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-9')">×</button>
+            <div class="modal-title">群創</div>
+            <div class="modal-topline">
+                <span class="action-wait">等</span>｜
+                <span class="trend-bull">偏多</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">27.7</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.47</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">52.49 / 63.99</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">55.02</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">1.816</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">1.754</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">0.062</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">29.59 / 26.08 / 24.86</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">是</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">4.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-wait">等</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD柱體縮短</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，以偏多看待，短線節奏轉弱。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-10" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-10')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-10')">×</button>
+            <div class="modal-title">元大台灣50</div>
+            <div class="modal-topline">
+                <span class="action-neutral">看</span>｜
+                <span class="trend-flat">震盪</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">76.65</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.39</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">56.76 / 50.72</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">53.69</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">0.92</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">1.38</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.46</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">76.6 / 76.92 / 74.47</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">空頭整理</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">2</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-neutral">看</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">目前介於中期結構分界，暫以震盪整理看待，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-11" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-11')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-11')">×</button>
+            <div class="modal-title">台積電</div>
+            <div class="modal-topline">
+                <span class="action-neutral">看</span>｜
+                <span class="trend-flat">震盪</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">1870.0</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.36</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">46.61 / 44.65</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">52.14</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">25.021</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">40.171</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-15.15</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">1881.0 / 1894.75 / 1824.25</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">空頭整理</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">1</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-neutral">看</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span> <span class="warn-tag warn-high">KD黃金交叉(新)</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">目前介於中期結構分界，暫以震盪整理看待，短線節奏轉強，剛出現 KD 黃金交叉。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-12" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-12')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-12')">×</button>
+            <div class="modal-title">中信中國50</div>
+            <div class="modal-topline">
+                <span class="action-neutral">看</span>｜
+                <span class="trend-flat">震盪</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">25.35</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">0.32</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">79.44 / 62.35</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">49.78</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.387</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.505</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">0.118</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">24.98 / 25.14 / 26.05</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">0</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">2.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">2.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-neutral">看</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-high">跌破MA40</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">目前介於中期結構分界，暫以震盪整理看待，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-13" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-13')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-13')">×</button>
+            <div class="modal-title">台塑化</div>
+            <div class="modal-topline">
+                <span class="action-neutral">看</span>｜
+                <span class="trend-flat">震盪</span>｜
+                <span class="short-avoid">不放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">56.7</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-neg">-2.24</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">25.32 / 40.16</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">51.82</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">2.19</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">2.508</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.318</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">57.84 / 56.24 / 52.72</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">非空方主場</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-avoid">不放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">4</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">3.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-neutral">看</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-low">MACD柱體縮短</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構在均線之上，暫以震盪整理看待，短線節奏轉弱。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-14" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-14')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-14')">×</button>
+            <div class="modal-title">台塑</div>
+            <div class="modal-topline">
+                <span class="action-caution">別追</span>｜
+                <span class="trend-flat">震盪</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">46.45</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-neg">-0.85</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">14.78 / 18.26</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">48.78</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">0.25</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">0.76</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.51</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">46.44 / 47.81 / 46.31</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-flat">整理</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">空頭整理</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">4</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-1.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-0.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-caution">別追</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">目前介於中期結構分界，暫以震盪整理看待。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-15" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-15')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-15')">×</button>
+            <div class="modal-title">凱基台灣TOP50</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-bear">震盪偏空</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">23.54</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-neg">-0.51</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">66.43 / 52.97</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">47.72</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.075</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.007</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.068</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">23.5 / 23.86 / 23.78</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">空頭整理</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">5</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">3.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-4.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先以震盪偏空看待，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-16" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-16')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-16')">×</button>
+            <div class="modal-title">第一金</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-bear">震盪偏空</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">29.1</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">0.87</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">61.81 / 55.99</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">48.37</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.09</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.04</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.05</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">28.97 / 29.29 / 29.27</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">空頭整理</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">5</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">3.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-4.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先以震盪偏空看待，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-17" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-17')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-17')">×</button>
+            <div class="modal-title">中鋼</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-bear">震盪偏空</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">19.25</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">0.52</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">30.94 / 26.58</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">44.18</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.206</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.072</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.133</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">19.27 / 19.94 / 19.86</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">空頭整理</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">6</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">3.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-4.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先以震盪偏空看待，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-18" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-18')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-18')">×</button>
+            <div class="modal-title">友達</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-bear">震盪偏空</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">15.9</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.27</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">44.48 / 48.35</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">52.03</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">0.37</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">0.417</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.047</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">16.41 / 15.91 / 15.47</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">空頭整理</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">6</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">1.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-2.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-low">MACD柱體縮短</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">目前介於中期結構分界，先以震盪偏空看待，短線節奏轉弱。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-19" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-19')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-19')">×</button>
+            <div class="modal-title">中信中國50正2</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-rebound">偏空反彈</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">11.47</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.06</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">74.05 / 56.95</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">47.01</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.374</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.439</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">0.065</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">11.23 / 11.5 / 12.27</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">偏空反彈</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">2</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-1.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">3.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-2.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-20" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-20')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-20')">×</button>
+            <div class="modal-title">S&P500期貨</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-rebound">偏空反彈</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">6770.75</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">0.98</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">43.26 / 41.02</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">45.58</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-53.39</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-41.628</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-11.762</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">6713.7 / 6827.16 / 6880.51</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">偏空反彈</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">6</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">3.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-4.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span> <span class="warn-tag warn-high">KD黃金交叉(新)</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強，剛出現 KD 黃金交叉。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-21" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-21')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-21')">×</button>
+            <div class="modal-title">香港恆生指數</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-rebound">偏空反彈</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">25868.54</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">0.13</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">60.0 / 48.94</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">46.45</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-260.926</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-254.249</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-6.677</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">25756.74 / 26072.2 / 26519.79</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">偏空反彈</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">7</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-6.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-22" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-22')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-22')">×</button>
+            <div class="modal-title">國泰金</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-rebound">偏空反彈</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">73.2</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.1</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">54.23 / 40.97</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">45.98</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-1.054</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.705</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.349</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">72.32 / 75.1 / 75.53</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">偏空反彈</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">7</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-6.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-23" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-23')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-23')">×</button>
+            <div class="modal-title">台泥</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-rebound">偏空反彈</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">24.45</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-neg">-0.61</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">39.32 / 37.01</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">41.36</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.2</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.036</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.164</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">24.75 / 25.35 / 25.49</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">偏空反彈</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">8</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-6.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-24" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-24')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-24')">×</button>
+            <div class="modal-title">兆豐金</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-rebound">偏空反彈</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">39.35</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">0.9</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">54.97 / 44.72</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">47.08</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.252</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.192</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.06</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">39.04 / 39.69 / 39.75</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">偏空反彈</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">7</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-3.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-6.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-25" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-25')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-25')">×</button>
+            <div class="modal-title">華航</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-rebound">偏空反彈</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">19.0</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.6</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">49.91 / 32.36</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">38.37</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.789</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.682</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.107</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">18.82 / 20.13 / 21.02</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-strong">轉強</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">偏空反彈</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">9</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-4.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-7.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉強。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-26" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-26')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-26')">×</button>
+            <div class="modal-title">裕隆</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-rebound">偏空反彈</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">28.0</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">1.08</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">16.93 / 17.64</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">35.68</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.974</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.88</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.094</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">28.02 / 29.42 / 30.48</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-flat">整理</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">偏空反彈</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">10</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-6.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-9.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先視為偏空中的反彈。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-27" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-27')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-27')">×</button>
+            <div class="modal-title">鴻海</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-rebound">偏空反彈</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">212.0</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-neg">-2.08</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">29.89 / 27.82</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">42.12</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-3.252</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-1.918</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-1.334</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">215.3 / 223.0 / 223.75</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">偏空反彈</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">9</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-5.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-8.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-low">MACD柱體縮短</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，先視為偏空中的反彈，短線節奏轉弱。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-28" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-28')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-28')">×</button>
+            <div class="modal-title">潤泰新</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-bear">偏空</span>｜
+                <span class="short-sell">可放空</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">26.9</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-pos">0.75</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">21.52 / 26.52</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">32.95</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.543</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">-0.366</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.177</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">27.5 / 28.54 / 28.92</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">空頭結構</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-sell">可放空</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">11</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-8.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-11.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-low">MACD柱體縮短</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，空方結構仍在，短線節奏轉弱，空方信號：可放空。</div></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="symbol-modal-29" class="modal-overlay" onclick="closeModal(event, 'symbol-modal-29')">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close" type="button" onclick="closeModalById('symbol-modal-29')">×</button>
+            <div class="modal-title">三商壽</div>
+            <div class="modal-topline">
+                <span class="action-defend">停</span>｜
+                <span class="trend-bear">偏空</span>｜
+                <span class="short-watch">空方觀察</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item"><div class="detail-k">技術基準價</div><div class="detail-v">7.68</div></div>
+                <div class="detail-item"><div class="detail-k">技術基準漲跌幅</div><div class="detail-v"><span class="num-neg">-0.65</span></div></div>
+                <div class="detail-item"><div class="detail-k">KD</div><div class="detail-v">14.34 / 26.35</div></div>
+                <div class="detail-item"><div class="detail-k">RSI</div><div class="detail-v">35.44</div></div>
+                <div class="detail-item"><div class="detail-k">MACD</div><div class="detail-v">-0.033</div></div>
+                <div class="detail-item"><div class="detail-k">MACD訊號</div><div class="detail-v">0.018</div></div>
+                <div class="detail-item"><div class="detail-k">MACD柱體</div><div class="detail-v">-0.051</div></div>
+                <div class="detail-item"><div class="detail-k">MA5 / MA20 / MA40</div><div class="detail-v">7.84 / 8.01 / 7.93</div></div>
+                <div class="detail-item"><div class="detail-k">節奏</div><div class="detail-v"><span class="rhythm-weak">轉弱</span></div></div>
+                <div class="detail-item"><div class="detail-k">主升段</div><div class="detail-v">否</div></div>
+                <div class="detail-item"><div class="detail-k">空方結構</div><div class="detail-v">空頭整理</div></div>
+                <div class="detail-item"><div class="detail-k">放空訊號</div><div class="detail-v"><span class="short-watch">空方觀察</span></div></div>
+                <div class="detail-item"><div class="detail-k">放空信心分數</div><div class="detail-v">9</div></div>
+                <div class="detail-item"><div class="detail-k">綜合分數</div><div class="detail-v">-8.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前市場因子</div><div class="detail-v">1.55</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前族群因子</div><div class="detail-v">0.0</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前風險扣分</div><div class="detail-v">5.0</div></div>
+                <div class="detail-item"><div class="detail-k">校正後分數</div><div class="detail-v">-11.45</div></div>
+                <div class="detail-item"><div class="detail-k">開盤前建議</div><div class="detail-v"><span class="action-defend">停</span></div></div>
+                <div class="detail-item"><div class="detail-k">技術時間</div><div class="detail-v">2026-03-17 00:00:00</div></div>
+                <div class="detail-item"><div class="detail-k">報價時間</div><div class="detail-v">—</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">橋接說明</div><div class="detail-v">目前僅有技術基準資料</div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">警示</div><div class="detail-v"><span class="warn-tag warn-low">跌破MA5</span> <span class="warn-tag warn-mid">跌破MA20</span> <span class="warn-tag warn-high">跌破MA40</span> <span class="warn-tag warn-mid">KD死叉</span> <span class="warn-tag warn-low">MACD弱於訊號</span> <span class="warn-tag warn-low">MACD柱體縮短</span> <span class="warn-tag warn-high">空方主導</span></div></div>
+                <div class="detail-item" style="grid-column:1 / -1;"><div class="detail-k">一句話</div><div class="detail-v">中期結構仍在均線之下，空方結構仍在，短線節奏轉弱。</div></div>
+            </div>
+        </div>
+    </div>
+    
+<script>
+function openModal(id) { var el = document.getElementById(id); if (el) el.classList.add('show'); }
+function closeModal(evt, id) { if (evt.target.id === id) closeModalById(id); }
+function closeModalById(id) { var el = document.getElementById(id); if (el) el.classList.remove('show'); }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { document.querySelectorAll('.modal-overlay.show').forEach(function(el) { el.classList.remove('show'); }); } });
+</script>
+</body>
+</html>
